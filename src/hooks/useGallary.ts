@@ -1,5 +1,6 @@
 import * as ImagePicker from "expo-image-picker";
 import { useState } from "react";
+import { Dimensions } from "react-native";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 
 export interface ImageItem {
@@ -8,12 +9,22 @@ export interface ImageItem {
 }
 
 const useGallary = () => {
+  const screenWidth = Dimensions.get("window").width;
+  const imageWidth = screenWidth / 3;
   const { top: topSafeArea } = useSafeAreaInsets();
   const [images, setImages] = useState<ImageItem[]>([]);
 
   const onOpenGallaryPress = async () => {
     await pickImage();
   };
+
+  const imagesWidthAddButton = [
+    ...images,
+    {
+      id: -1,
+      uri: "https://picsum.photos/200/300",
+    },
+  ]
 
   const pickImage = async () => {
     // No permissions request is necessary for launching the image library
@@ -27,8 +38,9 @@ const useGallary = () => {
     console.log(JSON.stringify(result, null, 2));
 
     if (!result.canceled) {
+      const id = images.length === 0 ? 0 : images[images.length - 1].id + 1;
       const newImage = {
-        id: images.length + 1,
+        id: id,
         uri: result.assets[0].uri,
       };
       setImages([...images, newImage]);
@@ -45,8 +57,10 @@ const useGallary = () => {
   return {
     onOpenGallaryPress,
     images,
+    imagesWidthAddButton,
     topSafeArea,
     onDeletePress,
+    imageWidth,
   };
 };
 

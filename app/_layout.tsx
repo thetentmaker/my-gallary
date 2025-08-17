@@ -2,19 +2,23 @@ import useGallary, { ImageItem } from "@/src/hooks/useGallary";
 import {
   Alert,
   Button,
-  Dimensions,
   FlatList,
   Image,
   SafeAreaView,
   StyleSheet,
+  Text,
   TouchableOpacity,
-  View,
+  View
 } from "react-native";
 
 export default function RootLayout() {
-  const { onOpenGallaryPress, topSafeArea, images, onDeletePress } = useGallary();
-  const width = Dimensions.get("window").width;
-  const imageWidth = width / 3;
+  const {
+    onOpenGallaryPress,
+    topSafeArea,
+    onDeletePress,
+    imagesWidthAddButton,
+    imageWidth
+  } = useGallary();
 
   interface RenderItemProps {
     item: ImageItem;
@@ -22,22 +26,28 @@ export default function RootLayout() {
   }
 
   const renderItem = ({ item, index }: RenderItemProps) => {
+    if (item.id === -1) {
+      return (
+        <TouchableOpacity
+          onPress={onOpenGallaryPress}
+          style={[styles.addButton, { width: imageWidth, height: imageWidth }]}
+        >
+          <Text style={styles.addButtonText}>+</Text>
+        </TouchableOpacity>
+      );
+    }
     return (
       <TouchableOpacity
         onLongPress={() => {
-          Alert.alert(
-            "",
-            "삭제할까요?",
-            [
-              { text: "취소", style: "cancel" },
-              { text: "삭제", onPress: () => onDeletePress(item.id) },
-            ],
-          );
+          Alert.alert("", "삭제할까요?", [
+            { text: "취소", style: "cancel" },
+            { text: "삭제", onPress: () => onDeletePress(item.id) },
+          ]);
         }}
       >
-      <Image
-        source={{ uri: item.uri }}
-        style={[styles.image, { width: imageWidth, height: imageWidth }]}
+        <Image
+          source={{ uri: item.uri }}
+          style={[styles.image, { width: imageWidth, height: imageWidth }]}
           resizeMode="cover"
         />
       </TouchableOpacity>
@@ -50,7 +60,7 @@ export default function RootLayout() {
         <Button title="onOpenGallaryPress" onPress={onOpenGallaryPress} />
         {/* FlatList로 구현.= */}
         <FlatList
-          data={images}
+          data={imagesWidthAddButton}
           renderItem={renderItem}
           keyExtractor={(item) => item.id.toString()}
           numColumns={3}
@@ -67,5 +77,14 @@ const styles = StyleSheet.create({
   },
   image: {
     borderRadius: 0,
+  },
+  addButton: {
+    backgroundColor: "gray",
+    justifyContent: "center",
+    alignItems: "center",
+  },
+  addButtonText: {
+    fontSize: 45,
+    color: "white",
   },
 });
