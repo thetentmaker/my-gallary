@@ -1,13 +1,11 @@
-import useGallary, { ImageItem } from "@/src/hooks/useGallary";
+import GallaryRenderItem from "@/src/components/GallaryRenderItem";
+import useGallary from "@/src/hooks/useGallary";
 import {
   Alert,
   Button,
   FlatList,
-  Image,
   SafeAreaView,
   StyleSheet,
-  Text,
-  TouchableOpacity,
   View
 } from "react-native";
 
@@ -16,44 +14,16 @@ export default function RootLayout() {
     onOpenGallaryPress,
     topSafeArea,
     onDeletePress,
+    
     imagesWidthAddButton,
-    imageWidth
   } = useGallary();
 
-  interface RenderItemProps {
-    item: ImageItem;
-    index: number;
-  }
-
-  const renderItem = ({ item, index }: RenderItemProps) => {
-    if (item.id === -1) {
-      return (
-        <TouchableOpacity
-          onPress={onOpenGallaryPress}
-          style={[styles.addButton, { width: imageWidth, height: imageWidth }]}
-        >
-          <Text style={styles.addButtonText}>+</Text>
-        </TouchableOpacity>
-      );
-    }
-    return (
-      <TouchableOpacity
-        onLongPress={() => {
-          Alert.alert("", "삭제할까요?", [
-            { text: "취소", style: "cancel" },
-            { text: "삭제", onPress: () => onDeletePress(item.id) },
-          ]);
-        }}
-      >
-        <Image
-          source={{ uri: item.uri }}
-          style={[styles.image, { width: imageWidth, height: imageWidth }]}
-          resizeMode="cover"
-        />
-      </TouchableOpacity>
-    );
+  const onItemLongPress = (id: number) => {
+    Alert.alert("", "삭제할까요?", [
+      { text: "취소", style: "cancel" },
+      { text: "삭제", onPress: () => onDeletePress(id) },
+    ]);
   };
-
   return (
     <SafeAreaView style={[styles.container, { paddingTop: topSafeArea }]}>
       <View style={styles.container}>
@@ -61,7 +31,14 @@ export default function RootLayout() {
         {/* FlatList로 구현.= */}
         <FlatList
           data={imagesWidthAddButton}
-          renderItem={renderItem}
+          renderItem={({ item, index }) => (
+            <GallaryRenderItem
+              item={item}
+              index={index}
+              onAddPress={onOpenGallaryPress}
+              onItemLongPress={() => onItemLongPress(item.id)}
+            />
+          )}
           keyExtractor={(item) => item.id.toString()}
           numColumns={3}
         />
@@ -79,7 +56,7 @@ const styles = StyleSheet.create({
     borderRadius: 0,
   },
   addButton: {
-    backgroundColor: "gray",
+    backgroundColor: "lightgray",
     justifyContent: "center",
     alignItems: "center",
   },
