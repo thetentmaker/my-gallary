@@ -8,11 +8,27 @@ export interface ImageItem {
   uri: string;
 }
 
+interface Album {
+  id: number;
+  title: string;
+}
+
+const DEFAULT_ALBUM = {
+  id: 1,
+  title: "기본",
+};
+
 const useGallary = () => {
   const screenWidth = Dimensions.get("window").width;
   const imageWidth = screenWidth / 3;
   const { top: topSafeArea } = useSafeAreaInsets();
   const [images, setImages] = useState<ImageItem[]>([]);
+
+  // 앨범 관련 상태
+  const [selectedAlbum, setSelectedAlbum] = useState<Album>(DEFAULT_ALBUM);
+  const [albums, setAlbums] = useState<Album[]>([DEFAULT_ALBUM]);
+
+  const [modelVisible, setModelVisible] = useState(false);
 
   const onOpenGallaryPress = async () => {
     await pickImage();
@@ -24,7 +40,7 @@ const useGallary = () => {
       id: -1,
       uri: "https://picsum.photos/200/300",
     },
-  ]
+  ];
 
   const pickImage = async () => {
     // No permissions request is necessary for launching the image library
@@ -49,11 +65,22 @@ const useGallary = () => {
 
   const onDeletePress = (id: number) => {
     deleteImage(id);
-  }
+  };
   const deleteImage = (id: number) => {
     setImages(images.filter((image) => image.id !== id));
   };
 
+  const onAddAlbumPress = () => {
+    openModel();
+  };
+
+  const openModel = () => {
+    setModelVisible(true);
+  };
+
+  // const closeModel = () => {
+  //   setModelVisible(false);
+  // };
   return {
     onOpenGallaryPress,
     images,
@@ -61,6 +88,9 @@ const useGallary = () => {
     topSafeArea,
     onDeletePress,
     imageWidth,
+    selectedAlbum,
+    modelVisible,
+    onAddAlbumPress
   };
 };
 

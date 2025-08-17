@@ -1,8 +1,9 @@
 import GallaryRenderItem from "@/src/components/GallaryRenderItem";
+import MyDropDownPicker from "@/src/components/MyDropDownPicker";
+import TextInputModal from "@/src/components/TextInputModal";
 import useGallary from "@/src/hooks/useGallary";
 import {
   Alert,
-  Button,
   FlatList,
   SafeAreaView,
   StyleSheet,
@@ -14,8 +15,10 @@ export default function RootLayout() {
     onOpenGallaryPress,
     topSafeArea,
     onDeletePress,
-    
+    selectedAlbum,
     imagesWidthAddButton,
+    modelVisible,
+    onAddAlbumPress
   } = useGallary();
 
   const onItemLongPress = (id: number) => {
@@ -24,11 +27,17 @@ export default function RootLayout() {
       { text: "삭제", onPress: () => onDeletePress(id) },
     ]);
   };
+
   return (
     <SafeAreaView style={[styles.container, { paddingTop: topSafeArea }]}>
       <View style={styles.container}>
-        <Button title="onOpenGallaryPress" onPress={onOpenGallaryPress} />
-        {/* FlatList로 구현.= */}
+        {/* 앨범 추가 버튼 */}
+        <MyDropDownPicker title={selectedAlbum.title} onPress={onAddAlbumPress} />
+
+        {/* 앨범 추가 모달 */}
+        <TextInputModal visible={modelVisible} />
+
+        {/* 이미지 리스트 */}
         <FlatList
           data={imagesWidthAddButton}
           renderItem={({ item, index }) => (
