@@ -12,11 +12,17 @@ export default function RootLayout() {
     selectedAlbum,
     imagesWidthAddButton,
     modelVisible,
-    onAddAlbumPress,
+    onPressAddButton,
     albumTitle,
     setAlbumTitle,
     onSubmitEditing,
     onPressBackdrop,
+    onPressHeader,
+    isDropdownOpen,
+    openDropdown,
+    closeDropdown,
+    albums,
+    onPressAlbum,
   } = useGallary();
 
   const onItemLongPress = (id: number) => {
@@ -31,8 +37,13 @@ export default function RootLayout() {
       <View style={styles.container}>
         {/* 앨범 추가 버튼 */}
         <MyDropDownPicker
-          title={selectedAlbum.title}
-          onPress={onAddAlbumPress}
+          selectedAlbumTitle={selectedAlbum.title}
+          onPressAddButton={onPressAddButton}
+          onPressHeader={onPressHeader}
+          isDropdownOpen={isDropdownOpen}
+          albums={albums}
+          onPressAlbum={onPressAlbum}
+          selectedAlbum={selectedAlbum}
         />
 
         {/* 앨범 추가 모달 */}
@@ -46,6 +57,7 @@ export default function RootLayout() {
 
         {/* 이미지 리스트 */}
         <FlatList
+          style={styles.flatList}
           data={imagesWidthAddButton}
           renderItem={({ item, index }) => (
             <GallaryRenderItem
@@ -79,5 +91,8 @@ const styles = StyleSheet.create({
   addButtonText: {
     fontSize: 45,
     color: "white",
+  },
+  flatList: {
+    zIndex: 0,
   },
 });

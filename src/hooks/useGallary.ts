@@ -8,7 +8,7 @@ export interface ImageItem {
   uri: string;
 }
 
-interface Album {
+export interface Album {
   id: number;
   title: string;
 }
@@ -30,6 +30,7 @@ const useGallary = () => {
   const [albumTitle, setAlbumTitle] = useState("");
 
   const [modelVisible, setModelVisible] = useState(false);
+  const [isDropdownOpen, setIsDropdownOpen] = useState(false);
 
   const onOpenGallaryPress = async () => {
     await pickImage();
@@ -52,8 +53,6 @@ const useGallary = () => {
       quality: 1,
     });
 
-    console.log(JSON.stringify(result, null, 2));
-
     if (!result.canceled) {
       const id = images.length === 0 ? 0 : images[images.length - 1].id + 1;
       const newImage = {
@@ -71,7 +70,7 @@ const useGallary = () => {
     setImages(images.filter((image) => image.id !== id));
   };
 
-  const onAddAlbumPress = () => {
+  const onPressAddButton = () => {
     openModel();
   };
 
@@ -98,19 +97,24 @@ const useGallary = () => {
     const newAlbum = {
       id: id,
       title: albumTitle,
-    }
-    setAlbums([
-      ...albums,
-      newAlbum
-    ])
+    };
+    setAlbums([...albums, newAlbum]);
   };
 
-  const resetAlbumTitle = () => {
-    setAlbumTitle("");
-  };
+  const resetAlbumTitle = () => setAlbumTitle("");
 
-  const onPressBackdrop = () => {
-    closeModel();
+  const onPressBackdrop = () => closeModel();
+
+  const onPressHeader = () =>
+    isDropdownOpen ? closeDropdown() : openDropdown();
+
+  const openDropdown = () => setIsDropdownOpen(true);
+
+  const closeDropdown = () => setIsDropdownOpen(false);
+
+  const onPressAlbum = (albumId: number) => {
+    setSelectedAlbum(albums.find((album) => album.id === albumId)!);
+    closeDropdown();
   };
 
   return {
@@ -122,13 +126,19 @@ const useGallary = () => {
     imageWidth,
     selectedAlbum,
     modelVisible,
-    onAddAlbumPress,
+    onPressAddButton,
     albumTitle,
     setAlbumTitle,
     onSubmitEditing,
     addAlbum,
     resetAlbumTitle,
     onPressBackdrop,
+    onPressHeader,
+    openDropdown,
+    closeDropdown,
+    isDropdownOpen,
+    albums,
+    onPressAlbum
   };
 };
 
