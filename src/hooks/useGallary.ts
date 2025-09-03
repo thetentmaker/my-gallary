@@ -14,7 +14,7 @@ export interface Album {
   title: string;
 }
 
-const DEFAULT_ALBUM = {
+export const DEFAULT_ALBUM = {
   id: 1,
   title: "기본",
 };
@@ -30,8 +30,11 @@ const useGallary = () => {
   const [albums, setAlbums] = useState<Album[]>([DEFAULT_ALBUM]);
   const [albumTitle, setAlbumTitle] = useState("");
 
-  const [modelVisible, setModelVisible] = useState(false);
+  const [textInputModelVisible, setTextInputModelVisible] = useState(false);
+  const [bigImgModalVisible, setBigImgModalVisible] = useState(false);
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
+
+  const [selectedImage, setSelectedImage] = useState<ImageItem | null>(null);
 
   const onOpenGallaryPress = async () => {
     await pickImage();
@@ -75,15 +78,15 @@ const useGallary = () => {
   };
 
   const onPressAddButton = () => {
-    openModel();
+    openTextInputModel();
   };
 
-  const openModel = () => {
-    setModelVisible(true);
+  const openTextInputModel = () => {
+    setTextInputModelVisible(true);
   };
 
-  const closeModel = () => {
-    setModelVisible(false);
+  const closeTextInputModel = () => {
+    setTextInputModelVisible(false);
   };
 
   const onSubmitEditing = () => {
@@ -93,7 +96,7 @@ const useGallary = () => {
     addAlbum();
     // 2. 모달 닫기 & TextInput 초기화
     resetAlbumTitle();
-    closeModel();
+    closeTextInputModel();
   };
 
   const addAlbum = () => {
@@ -103,11 +106,23 @@ const useGallary = () => {
       title: albumTitle,
     };
     setAlbums([...albums, newAlbum]);
+    // 새 앨범을 만드는 순간 해당 앨범을 선택
+    setSelectedAlbum(newAlbum);
   };
 
   const resetAlbumTitle = () => setAlbumTitle("");
 
-  const onPressBackdrop = () => closeModel();
+  const onPressBackdropTextInputModal = () => closeTextInputModel();
+
+  const openBigImgModal = (image: ImageItem) => {
+    setBigImgModalVisible(true);
+  };
+
+  const closeBigImgModal = () => {
+    setBigImgModalVisible(false);
+  };
+
+  const onPressBackdropBigImgModal = () => closeBigImgModal();
 
   const onPressHeader = () =>
     isDropdownOpen ? closeDropdown() : openDropdown();
@@ -121,6 +136,20 @@ const useGallary = () => {
     closeDropdown();
   };
 
+  const deleteAlbum = (albumId: number) => {
+    // 해당 앨범 삭제
+    const newAlbums = albums.filter((album) => album.id !== albumId);
+    setAlbums(newAlbums);
+    // 기본 앨범 선택
+    setSelectedAlbum(DEFAULT_ALBUM);
+    // 해당 앨범에 포함되어 있던 이미지도 삭제
+    setImages(images.filter((image) => image.albumId !== albumId));
+  };
+
+  const onPressImage = (image: ImageItem) => {
+    setSelectedImage(image);
+    openBigImgModal(image);
+  };
   return {
     onOpenGallaryPress,
     images,
@@ -129,20 +158,27 @@ const useGallary = () => {
     onDeletePress,
     imageWidth,
     selectedAlbum,
-    modelVisible,
+    textInputModelVisible,
     onPressAddButton,
     albumTitle,
     setAlbumTitle,
     onSubmitEditing,
     addAlbum,
     resetAlbumTitle,
-    onPressBackdrop,
+    onPressBackdropTextInputModal,
     onPressHeader,
     openDropdown,
     closeDropdown,
     isDropdownOpen,
     albums,
-    onPressAlbum
+    onPressAlbum,
+    deleteAlbum,
+    bigImgModalVisible,
+    openBigImgModal,
+    closeBigImgModal,
+    onPressBackdropBigImgModal,
+    onPressImage,
+    selectedImage,
   };
 };
 

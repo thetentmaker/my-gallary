@@ -1,7 +1,7 @@
 import { SimpleLineIcons } from "@expo/vector-icons";
 import React from "react";
-import { StyleSheet, Text, TouchableOpacity, View } from "react-native";
-import { Album } from "../hooks/useGallary";
+import { Alert, StyleSheet, Text, TouchableOpacity, View } from "react-native";
+import { Album, DEFAULT_ALBUM } from "../hooks/useGallary";
 
 const HEADER_HEIGHT = 50;
 interface MyDropDownPickerProps {
@@ -12,6 +12,7 @@ interface MyDropDownPickerProps {
   albums: Album[];
   onPressAlbum: (albumId: number) => void;
   selectedAlbum: Album;
+  deleteAlbum: (albumId: number) => void;
 }
 const MyDropDownPicker = ({
   selectedAlbumTitle,
@@ -21,6 +22,7 @@ const MyDropDownPicker = ({
   albums,
   onPressAlbum,
   selectedAlbum,
+  deleteAlbum,
 }: MyDropDownPickerProps) => {
   const iconName = isDropdownOpen ? "arrow-up" : "arrow-down";
   return (
@@ -42,6 +44,7 @@ const MyDropDownPicker = ({
           albums={albums}
           onPressAlbum={onPressAlbum}
           selectedAlbum={selectedAlbum}
+          deleteAlbum={deleteAlbum}
         />
       )}
     </View>
@@ -52,12 +55,14 @@ interface AlbumDropdownProps {
   albums: Album[];
   onPressAlbum: (albumId: number) => void;
   selectedAlbum: Album;
+  deleteAlbum: (albumId: number) => void;
 }
 
 const AlbumDropdown = ({
   albums,
   onPressAlbum,
   selectedAlbum,
+  deleteAlbum,
 }: AlbumDropdownProps) => {
   return (
     <View style={styles.dropdown}>
@@ -66,10 +71,12 @@ const AlbumDropdown = ({
         return (
           <TouchableOpacity
             key={album.id}
+            activeOpacity={1}
             style={styles.albumDropdownItem}
             onPress={() => onPressAlbum(album.id)}
+            onLongPress={() => onLongPress(album.id, deleteAlbum)}
           >
-            <Text style={{fontWeight}}>{album.title}</Text>
+            <Text style={{ fontWeight }}>{album.title}</Text>
           </TouchableOpacity>
         );
       })}
@@ -77,6 +84,19 @@ const AlbumDropdown = ({
   );
 };
 
+const onLongPress = (
+  albumId: number,
+  deleteAlbum: (albumId: number) => void
+) => {
+  if (albumId === DEFAULT_ALBUM.id) {
+    Alert.alert("", "기본 앨범은 삭제할 수 없습니다.");
+  } else {
+    Alert.alert("", "삭제할까요?", [
+      { text: "아니오", style: "cancel" },
+      { text: "예", onPress: () => deleteAlbum(albumId) },
+    ]);
+  }
+};
 export default MyDropDownPicker;
 
 const styles = StyleSheet.create({

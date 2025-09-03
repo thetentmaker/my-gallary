@@ -12,6 +12,7 @@ interface RenderItemProps {
   index: number;
   onAddPress: () => void;
   onItemLongPress: () => void;
+  onPressImage: (item: ImageItem) => void;
 }
 
 const screenWidth = Dimensions.get("window").width;
@@ -22,6 +23,7 @@ const GallaryRenderItem = ({
   index,
   onAddPress,
   onItemLongPress,
+  onPressImage,
 }: RenderItemProps) => {
   if (item.id === -1) {
     return (
@@ -34,7 +36,7 @@ const GallaryRenderItem = ({
     );
   }
   return (
-    <TouchableOpacity onLongPress={onItemLongPress}>
+    <TouchableOpacity onPress={() => {onPressImage(item)}} onLongPress={onItemLongPress}>
       <Image
         source={{ uri: item.uri }}
         style={[styles.image, { width: imageWidth, height: imageWidth }]}

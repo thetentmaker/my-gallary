@@ -1,3 +1,4 @@
+import BigImgModal from "@/src/components/BigImgModal";
 import GallaryRenderItem from "@/src/components/GallaryRenderItem";
 import MyDropDownPicker from "@/src/components/MyDropDownPicker";
 import TextInputModal from "@/src/components/TextInputModal";
@@ -11,16 +12,21 @@ export default function RootLayout() {
     onDeletePress,
     selectedAlbum,
     imagesWidthAddButton,
-    modelVisible,
+    textInputModelVisible,
     onPressAddButton,
     albumTitle,
     setAlbumTitle,
     onSubmitEditing,
-    onPressBackdrop,
+    onPressBackdropTextInputModal,
     onPressHeader,
     isDropdownOpen,
     albums,
     onPressAlbum,
+    deleteAlbum,
+    bigImgModalVisible,
+    onPressImage,
+    onPressBackdropBigImgModal,
+    selectedImage,
   } = useGallary();
 
   const onItemLongPress = (id: number) => {
@@ -42,17 +48,24 @@ export default function RootLayout() {
           albums={albums}
           onPressAlbum={onPressAlbum}
           selectedAlbum={selectedAlbum}
+          deleteAlbum={deleteAlbum}
         />
 
         {/* 앨범 추가 모달 */}
         <TextInputModal
-          onPressBackdrop={onPressBackdrop}
+          onPressBackdrop={onPressBackdropTextInputModal}
           onSubmitEditing={onSubmitEditing}
-          visible={modelVisible}
+          visible={textInputModelVisible}
           albumTitle={albumTitle}
           onChangeText={setAlbumTitle}
         />
 
+        {/* 이미지를 크게 보는 모달 */}
+        <BigImgModal
+          visible={bigImgModalVisible}
+          imageUri={selectedImage?.uri}
+          onPressBackdrop={onPressBackdropBigImgModal}
+        />
         {/* 이미지 리스트 */}
         <FlatList
           style={styles.flatList}
@@ -63,6 +76,7 @@ export default function RootLayout() {
               index={index}
               onAddPress={onOpenGallaryPress}
               onItemLongPress={() => onItemLongPress(item.id)}
+              onPressImage={(image) => onPressImage(image)}
             />
           )}
           keyExtractor={(item) => item.id.toString()}
