@@ -27,6 +27,10 @@ export default function RootLayout() {
     onPressImage,
     onPressBackdropBigImgModal,
     selectedImage,
+    onPressLeftArrowBigImgModal,
+    onPressRightArrowBigImgModal,
+    showPreviousArrow,
+    showNextArrow,
   } = useGallary();
 
   const onItemLongPress = (id: number) => {
@@ -65,6 +69,10 @@ export default function RootLayout() {
           visible={bigImgModalVisible}
           imageUri={selectedImage?.uri}
           onPressBackdrop={onPressBackdropBigImgModal}
+          onPressLeftArrow={onPressLeftArrowBigImgModal}
+          onPressRightArrow={onPressRightArrowBigImgModal}
+          showPreviousArrow={showPreviousArrow}
+          showNextArrow={showNextArrow}
         />
         {/* 이미지 리스트 */}
         <FlatList
