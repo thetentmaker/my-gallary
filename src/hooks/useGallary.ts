@@ -84,13 +84,13 @@ const useGallary = () => {
   };
 
   const onSubmitEditing = () => {
-    console.log("onSubmitEditing: ", JSON.stringify(albums, null, 2));
-    closeModel();
+    // guard
+    if (!albumTitle.trim()) return;
     // 1. 앨범에 타이틀 추가
     addAlbum();
     // 2. 모달 닫기 & TextInput 초기화
-    closeModel();
     resetAlbumTitle();
+    closeModel();
   };
 
   const addAlbum = () => {
@@ -109,6 +109,10 @@ const useGallary = () => {
     setAlbumTitle("");
   };
 
+  const onPressBackdrop = () => {
+    closeModel();
+  };
+
   return {
     onOpenGallaryPress,
     images,
@@ -124,6 +128,7 @@ const useGallary = () => {
     onSubmitEditing,
     addAlbum,
     resetAlbumTitle,
+    onPressBackdrop,
   };
 };
 

@@ -16,6 +16,7 @@ export default function RootLayout() {
     albumTitle,
     setAlbumTitle,
     onSubmitEditing,
+    onPressBackdrop,
   } = useGallary();
 
   const onItemLongPress = (id: number) => {
@@ -36,6 +37,7 @@ export default function RootLayout() {
 
         {/* 앨범 추가 모달 */}
         <TextInputModal
+          onPressBackdrop={onPressBackdrop}
           onSubmitEditing={onSubmitEditing}
           visible={modelVisible}
           albumTitle={albumTitle}

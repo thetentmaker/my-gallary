@@ -2,10 +2,10 @@ import {
   KeyboardAvoidingView,
   Modal,
   Platform,
+  Pressable,
   SafeAreaView,
   StyleSheet,
   TextInput,
-  View,
 } from "react-native";
 
 interface TextInputModalProps {
@@ -13,6 +13,7 @@ interface TextInputModalProps {
   albumTitle: string;
   onChangeText: (text: string) => void;
   onSubmitEditing: () => void;
+  onPressBackdrop: () => void;
 }
 
 const TextInputModal = ({
@@ -20,6 +21,7 @@ const TextInputModal = ({
   albumTitle,
   onChangeText,
   onSubmitEditing,
+  onPressBackdrop,
 }: TextInputModalProps) => {
   const behavior = Platform.OS === "ios" ? "padding" : "height";
   return (
@@ -28,7 +30,7 @@ const TextInputModal = ({
         behavior={behavior}
         style={styles.keyboardAvoidingView}
       >
-        <View style={styles.safeAreaViewContainer}>
+        <Pressable style={styles.safeAreaViewContainer} onPress={onPressBackdrop}>
           <SafeAreaView style={styles.safeAreaView}>
             <TextInput
               style={styles.input}
@@ -39,7 +41,7 @@ const TextInputModal = ({
               autoFocus={true}
             />
           </SafeAreaView>
-        </View>
+        </Pressable>
       </KeyboardAvoidingView>
     </Modal>
   );
@@ -60,7 +62,9 @@ const styles = StyleSheet.create({
     flex: 1,
   },
   input: {
-    backgroundColor: "lightblue",
     width: "100%",
+    padding: 10,
+    borderWidth: 0.5,
+    borderColor: "lightgray",
   },
 });
