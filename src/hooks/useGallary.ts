@@ -6,6 +6,7 @@ import { useSafeAreaInsets } from "react-native-safe-area-context";
 export interface ImageItem {
   id: number;
   uri: string;
+  albumId: number;
 }
 
 export interface Album {
@@ -36,11 +37,13 @@ const useGallary = () => {
     await pickImage();
   };
 
+  const filteredImages = images.filter((image) => image.albumId === selectedAlbum.id);
   const imagesWidthAddButton = [
-    ...images,
+    ...filteredImages,
     {
       id: -1,
       uri: "https://picsum.photos/200/300",
+      albumId: -1
     },
   ];
 
@@ -58,6 +61,7 @@ const useGallary = () => {
       const newImage = {
         id: id,
         uri: result.assets[0].uri,
+        albumId: selectedAlbum.id
       };
       setImages([...images, newImage]);
     }

@@ -19,8 +19,6 @@ export default function RootLayout() {
     onPressBackdrop,
     onPressHeader,
     isDropdownOpen,
-    openDropdown,
-    closeDropdown,
     albums,
     onPressAlbum,
   } = useGallary();

@@ -37,13 +37,42 @@ const MyDropDownPicker = ({
           <Text style={styles.addButtonText}>앨범추가</Text>
         </TouchableOpacity>
       </TouchableOpacity>
-      {isDropdownOpen && <View style={styles.dropdown}>
-        {albums.map((album) => (
-          <TouchableOpacity key={album.id} onPress={() => onPressAlbum(album.id)}>
-            <Text>{album.title}</Text>
+      {isDropdownOpen && (
+        <AlbumDropdown
+          albums={albums}
+          onPressAlbum={onPressAlbum}
+          selectedAlbum={selectedAlbum}
+        />
+      )}
+    </View>
+  );
+};
+
+interface AlbumDropdownProps {
+  albums: Album[];
+  onPressAlbum: (albumId: number) => void;
+  selectedAlbum: Album;
+}
+
+const AlbumDropdown = ({
+  albums,
+  onPressAlbum,
+  selectedAlbum,
+}: AlbumDropdownProps) => {
+  return (
+    <View style={styles.dropdown}>
+      {albums.map((album) => {
+        const fontWeight = selectedAlbum.id === album.id ? "bold" : "normal";
+        return (
+          <TouchableOpacity
+            key={album.id}
+            style={styles.albumDropdownItem}
+            onPress={() => onPressAlbum(album.id)}
+          >
+            <Text style={{fontWeight}}>{album.title}</Text>
           </TouchableOpacity>
-        ))}
-        </View>}
+        );
+      })}
     </View>
   );
 };
@@ -77,11 +106,21 @@ const styles = StyleSheet.create({
   dropdown: {
     position: "absolute",
     width: "100%",
-    height: 100,
     top: HEADER_HEIGHT,
-    backgroundColor: "lightblue",
+    backgroundColor: "white",
+    borderBottomColor: "lightgrey",
+    borderBottomWidth: 0.5,
+    borderTopColor: "lightgrey",
+    borderTopWidth: 0.5,
   },
   icon: {
     marginLeft: 8,
+  },
+  albumDropdownItem: {
+    paddingVertical: 12,
+    width: "100%",
+    alignItems: "center",
+    justifyContent: "center",
+    backgroundColor: "white",
   },
 });
