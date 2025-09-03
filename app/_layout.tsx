@@ -2,13 +2,7 @@ import GallaryRenderItem from "@/src/components/GallaryRenderItem";
 import MyDropDownPicker from "@/src/components/MyDropDownPicker";
 import TextInputModal from "@/src/components/TextInputModal";
 import useGallary from "@/src/hooks/useGallary";
-import {
-  Alert,
-  FlatList,
-  SafeAreaView,
-  StyleSheet,
-  View
-} from "react-native";
+import { Alert, FlatList, SafeAreaView, StyleSheet, View } from "react-native";
 
 export default function RootLayout() {
   const {
@@ -18,7 +12,10 @@ export default function RootLayout() {
     selectedAlbum,
     imagesWidthAddButton,
     modelVisible,
-    onAddAlbumPress
+    onAddAlbumPress,
+    albumTitle,
+    setAlbumTitle,
+    onSubmitEditing,
   } = useGallary();
 
   const onItemLongPress = (id: number) => {
@@ -32,10 +29,18 @@ export default function RootLayout() {
     <SafeAreaView style={[styles.container, { paddingTop: topSafeArea }]}>
       <View style={styles.container}>
         {/* 앨범 추가 버튼 */}
-        <MyDropDownPicker title={selectedAlbum.title} onPress={onAddAlbumPress} />
+        <MyDropDownPicker
+          title={selectedAlbum.title}
+          onPress={onAddAlbumPress}
+        />
 
         {/* 앨범 추가 모달 */}
-        <TextInputModal visible={modelVisible} />
+        <TextInputModal
+          onSubmitEditing={onSubmitEditing}
+          visible={modelVisible}
+          albumTitle={albumTitle}
+          onChangeText={setAlbumTitle}
+        />
 
         {/* 이미지 리스트 */}
         <FlatList

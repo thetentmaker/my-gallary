@@ -10,8 +10,17 @@ import {
 
 interface TextInputModalProps {
   visible: boolean;
+  albumTitle: string;
+  onChangeText: (text: string) => void;
+  onSubmitEditing: () => void;
 }
-const TextInputModal = ({ visible }: TextInputModalProps) => {
+
+const TextInputModal = ({
+  visible,
+  albumTitle,
+  onChangeText,
+  onSubmitEditing,
+}: TextInputModalProps) => {
   const behavior = Platform.OS === "ios" ? "padding" : "height";
   return (
     <Modal visible={visible} transparent={true} animationType="fade">
@@ -21,7 +30,14 @@ const TextInputModal = ({ visible }: TextInputModalProps) => {
       >
         <View style={styles.safeAreaViewContainer}>
           <SafeAreaView style={styles.safeAreaView}>
-            <TextInput style={styles.input} />
+            <TextInput
+              style={styles.input}
+              placeholder="앨범명을 입력해주세요."
+              value={albumTitle}
+              onChangeText={onChangeText}
+              onSubmitEditing={onSubmitEditing}
+              autoFocus={true}
+            />
           </SafeAreaView>
         </View>
       </KeyboardAvoidingView>

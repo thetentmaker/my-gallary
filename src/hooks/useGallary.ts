@@ -27,6 +27,7 @@ const useGallary = () => {
   // 앨범 관련 상태
   const [selectedAlbum, setSelectedAlbum] = useState<Album>(DEFAULT_ALBUM);
   const [albums, setAlbums] = useState<Album[]>([DEFAULT_ALBUM]);
+  const [albumTitle, setAlbumTitle] = useState("");
 
   const [modelVisible, setModelVisible] = useState(false);
 
@@ -78,9 +79,36 @@ const useGallary = () => {
     setModelVisible(true);
   };
 
-  // const closeModel = () => {
-  //   setModelVisible(false);
-  // };
+  const closeModel = () => {
+    setModelVisible(false);
+  };
+
+  const onSubmitEditing = () => {
+    console.log("onSubmitEditing: ", JSON.stringify(albums, null, 2));
+    closeModel();
+    // 1. 앨범에 타이틀 추가
+    addAlbum();
+    // 2. 모달 닫기 & TextInput 초기화
+    closeModel();
+    resetAlbumTitle();
+  };
+
+  const addAlbum = () => {
+    const id = albums.length === 0 ? 0 : albums[albums.length - 1].id + 1;
+    const newAlbum = {
+      id: id,
+      title: albumTitle,
+    }
+    setAlbums([
+      ...albums,
+      newAlbum
+    ])
+  };
+
+  const resetAlbumTitle = () => {
+    setAlbumTitle("");
+  };
+
   return {
     onOpenGallaryPress,
     images,
@@ -90,7 +118,12 @@ const useGallary = () => {
     imageWidth,
     selectedAlbum,
     modelVisible,
-    onAddAlbumPress
+    onAddAlbumPress,
+    albumTitle,
+    setAlbumTitle,
+    onSubmitEditing,
+    addAlbum,
+    resetAlbumTitle,
   };
 };
 
