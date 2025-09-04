@@ -36,9 +36,7 @@ const useGallary = () => {
 
   const [selectedImage, setSelectedImage] = useState<ImageItem | null>(null);
 
-  const onOpenGallaryPress = async () => {
-    await pickImage();
-  };
+  const onOpenGallaryPress = async () => await pickImage();
 
   const filteredImages = images.filter((image) => image.albumId === selectedAlbum.id);
   const imagesWidthAddButton = [
@@ -70,24 +68,14 @@ const useGallary = () => {
     }
   };
 
-  const onDeletePress = (id: number) => {
-    deleteImage(id);
-  };
-  const deleteImage = (id: number) => {
-    setImages(images.filter((image) => image.id !== id));
-  };
+  const onDeletePress = (id: number) => deleteImage(id);
+  const deleteImage = (id: number) => setImages(images.filter((image) => image.id !== id));
 
-  const onPressAddButton = () => {
-    openTextInputModel();
-  };
+  const onPressAddButton = () => openTextInputModel();
 
-  const openTextInputModel = () => {
-    setTextInputModelVisible(true);
-  };
+  const openTextInputModel = () => setTextInputModelVisible(true);
 
-  const closeTextInputModel = () => {
-    setTextInputModelVisible(false);
-  };
+  const closeTextInputModel = () => setTextInputModelVisible(false);
 
   const onSubmitEditing = () => {
     // guard
@@ -114,13 +102,9 @@ const useGallary = () => {
 
   const onPressBackdropTextInputModal = () => closeTextInputModel();
 
-  const openBigImgModal = (image: ImageItem) => {
-    setBigImgModalVisible(true);
-  };
+  const openBigImgModal = (image: ImageItem) => setBigImgModalVisible(true);
 
-  const closeBigImgModal = () => {
-    setBigImgModalVisible(false);
-  };
+  const closeBigImgModal = () => setBigImgModalVisible(false);
 
   const onPressBackdropBigImgModal = () => closeBigImgModal();
 
