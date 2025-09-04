@@ -6,7 +6,7 @@
 |------|------|
 | <img src="./images/normal_keyboard.png" width="300" alt="일반 폰 화면"> | <img src="./images/fold_keyboard.png" width="400" alt="폴드폰 화면"> |
 
-React Native 수습 기간 중 개발한 개인 갤러리 관리 토이 프로젝트입니다.
+갤러리 프로젝트입니다.
 
 ## 📖 프로젝트 소개
 
@@ -77,8 +77,8 @@ const calculateNumColumns = () => {
 - ✅ 디바이스 API (ImagePicker) 활용
 - ✅ 로컬 데이터 저장소 (AsyncStorage) 관리
 - ✅ 커스텀 컴포넌트 및 훅 개발
-- ✅ 반응형 디자인 및 화면 크기 대응
+- ✅ 갤러리 화면 크기 대응
 - ✅ TypeScript를 활용한 타입 안정성 확보
-- ✅ 모달
+- ✅ 모달 개발(DropDownPicker, 이미지 확대)
 
 ---
