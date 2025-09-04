@@ -1,5 +1,6 @@
+import AsyncStorage from "@react-native-async-storage/async-storage";
 import * as ImagePicker from "expo-image-picker";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Dimensions } from "react-native";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 
@@ -18,6 +19,12 @@ export const DEFAULT_ALBUM = {
   id: 1,
   title: "기본",
 };
+
+const ASYNC_STORAGE_KEYS = {
+  IMAGES: "images",
+  ALBUMS: "albums",
+};
+
 
 const useGallary = () => {
   const screenWidth = Dimensions.get("window").width;
@@ -64,12 +71,12 @@ const useGallary = () => {
         uri: result.assets[0].uri,
         albumId: selectedAlbum.id
       };
-      setImages([...images, newImage]);
+      setImagesFromStorage([...images, newImage]);
     }
   };
 
   const onDeletePress = (id: number) => deleteImage(id);
-  const deleteImage = (id: number) => setImages(images.filter((image) => image.id !== id));
+  const deleteImage = (id: number) => setImagesFromStorage(images.filter((image) => image.id !== id));
 
   const onPressAddButton = () => openTextInputModel();
 
@@ -93,7 +100,7 @@ const useGallary = () => {
       id: id,
       title: albumTitle,
     };
-    setAlbums([...albums, newAlbum]);
+    setAlbumsFromStorage([...albums, newAlbum]);
     // 새 앨범을 만드는 순간 해당 앨범을 선택
     setSelectedAlbum(newAlbum);
   };
@@ -123,11 +130,11 @@ const useGallary = () => {
   const deleteAlbum = (albumId: number) => {
     // 해당 앨범 삭제
     const newAlbums = albums.filter((album) => album.id !== albumId);
-    setAlbums(newAlbums);
+    setAlbumsFromStorage(newAlbums);
     // 기본 앨범 선택
     setSelectedAlbum(DEFAULT_ALBUM);
     // 해당 앨범에 포함되어 있던 이미지도 삭제
-    setImages(images.filter((image) => image.albumId !== albumId));
+    setImagesFromStorage(images.filter((image) => image.albumId !== albumId));
   };
 
   const onPressImage = (image: ImageItem) => {
@@ -157,6 +164,31 @@ const useGallary = () => {
 
   const showPreviousArrow = filteredImages.findIndex(image => image.id === selectedImage?.id) !== 0
   const showNextArrow = filteredImages.findIndex(image => image.id === selectedImage?.id) !== filteredImages.length - 1
+
+  const initValues = async () => {
+    const imagesFromStorage = await AsyncStorage.getItem(ASYNC_STORAGE_KEYS.IMAGES)
+    if(imagesFromStorage) {
+      setImages(JSON.parse(imagesFromStorage));
+    }
+    const albumsFromStorage = await AsyncStorage.getItem(ASYNC_STORAGE_KEYS.ALBUMS)
+    if(albumsFromStorage) {
+      setAlbums(JSON.parse(albumsFromStorage));
+    }
+  };
+
+  const setImagesFromStorage = (newImages: ImageItem[]) => {
+    setImages(newImages);
+    AsyncStorage.setItem(ASYNC_STORAGE_KEYS.IMAGES, JSON.stringify(newImages));
+  };
+
+  const setAlbumsFromStorage = (newAlbums: Album[]) => {
+    setAlbums(newAlbums);
+    AsyncStorage.setItem(ASYNC_STORAGE_KEYS.ALBUMS, JSON.stringify(newAlbums));
+  };
+
+  useEffect(() => {
+    initValues();
+  }, []);
 
   return {
     onOpenGallaryPress,
