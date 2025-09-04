@@ -1,19 +1,17 @@
 import BigImgModal from "@/src/components/BigImgModal";
-import GallaryRenderItem from "@/src/components/GallaryRenderItem";
+import ImageList from "@/src/components/ImageList";
 import MyDropDownPicker from "@/src/components/MyDropDownPicker";
 import TextInputModal from "@/src/components/TextInputModal";
 import useGallary from "@/src/hooks/useGallary";
-import { Alert, FlatList, SafeAreaView, StyleSheet, View } from "react-native";
+import { SafeAreaView, StyleSheet, View } from "react-native";
 
 export default function RootLayout() {
   const {
     onOpenGallaryPress,
     topSafeArea,
-    onDeletePress,
     selectedAlbum,
     imagesWidthAddButton,
     textInputModelVisible,
-    onPressAddButton,
     albumTitle,
     setAlbumTitle,
     onSubmitEditing,
@@ -31,15 +29,9 @@ export default function RootLayout() {
     onPressRightArrowBigImgModal,
     showPreviousArrow,
     showNextArrow,
+    onPressAddButton,
+    onItemLongPress
   } = useGallary();
-
-  const onItemLongPress = (id: number) => {
-    Alert.alert("", "삭제할까요?", [
-      { text: "취소", style: "cancel" },
-      { text: "삭제", onPress: () => onDeletePress(id) },
-    ]);
-  };
-
   return (
     <SafeAreaView style={[styles.container, { paddingTop: topSafeArea }]}>
       <View style={styles.container}>
@@ -75,20 +67,11 @@ export default function RootLayout() {
           showNextArrow={showNextArrow}
         />
         {/* 이미지 리스트 */}
-        <FlatList
-          style={styles.flatList}
-          data={imagesWidthAddButton}
-          renderItem={({ item, index }) => (
-            <GallaryRenderItem
-              item={item}
-              index={index}
-              onAddPress={onOpenGallaryPress}
-              onItemLongPress={() => onItemLongPress(item.id)}
-              onPressImage={(image) => onPressImage(image)}
-            />
-          )}
-          keyExtractor={(item) => item.id.toString()}
-          numColumns={3}
+        <ImageList
+          imagesWidthAddButton={imagesWidthAddButton}
+          onOpenGallaryPress={onOpenGallaryPress}
+          onItemLongPress={onItemLongPress}
+          onPressImage={onPressImage}
         />
       </View>
     </SafeAreaView>

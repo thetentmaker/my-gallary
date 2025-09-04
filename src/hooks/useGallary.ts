@@ -1,7 +1,7 @@
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import * as ImagePicker from "expo-image-picker";
 import { useEffect, useState } from "react";
-import { Dimensions } from "react-native";
+import { Alert, Dimensions } from "react-native";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 
 export interface ImageItem {
@@ -186,6 +186,13 @@ const useGallary = () => {
     AsyncStorage.setItem(ASYNC_STORAGE_KEYS.ALBUMS, JSON.stringify(newAlbums));
   };
 
+  const onItemLongPress = (id: number) => {
+    Alert.alert("", "삭제할까요?", [
+      { text: "아니오", style: "cancel" },
+      { text: "예", onPress: () => deleteImage(id) },
+    ]);
+  }
+
   useEffect(() => {
     initValues();
   }, []);
@@ -223,6 +230,7 @@ const useGallary = () => {
     onPressRightArrowBigImgModal,
     showPreviousArrow,
     showNextArrow,
+    onItemLongPress,
   };
 };
 

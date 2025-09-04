@@ -1,5 +1,4 @@
 import {
-  Dimensions,
   Image,
   StyleSheet,
   Text,
@@ -13,10 +12,8 @@ interface RenderItemProps {
   onAddPress: () => void;
   onItemLongPress: () => void;
   onPressImage: (item: ImageItem) => void;
+  imageWidth: number;
 }
-
-const screenWidth = Dimensions.get("window").width;
-const imageWidth = screenWidth / 3;
 
 const GallaryRenderItem = ({
   item,
@@ -24,6 +21,7 @@ const GallaryRenderItem = ({
   onAddPress,
   onItemLongPress,
   onPressImage,
+  imageWidth,
 }: RenderItemProps) => {
   if (item.id === -1) {
     return (
