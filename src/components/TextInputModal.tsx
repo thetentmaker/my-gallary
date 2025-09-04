@@ -24,13 +24,18 @@ const TextInputModal = ({
   onPressBackdrop,
 }: TextInputModalProps) => {
   const behavior = Platform.OS === "ios" ? "padding" : "height";
+  const keyboardVerticalOffset = Platform.OS === "ios" ? 0 : 60;
   return (
     <Modal visible={visible} transparent={true} animationType="fade">
       <KeyboardAvoidingView
         behavior={behavior}
+        keyboardVerticalOffset={keyboardVerticalOffset}
         style={styles.keyboardAvoidingView}
       >
-        <Pressable style={styles.safeAreaViewContainer} onPress={onPressBackdrop}>
+        <Pressable
+          style={styles.safeAreaViewContainer}
+          onPress={onPressBackdrop}
+        >
           <SafeAreaView style={styles.safeAreaView}>
             <TextInput
               style={styles.input}
@@ -66,5 +71,6 @@ const styles = StyleSheet.create({
     padding: 10,
     borderWidth: 0.5,
     borderColor: "lightgray",
+    backgroundColor: "white",
   },
 });
