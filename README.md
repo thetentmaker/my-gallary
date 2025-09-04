@@ -1,50 +1,87 @@
-# Welcome to your Expo app 👋
 
-This is an [Expo](https://expo.dev) project created with [`create-expo-app`](https://www.npmjs.com/package/create-expo-app).
 
-## Get started
+# My Gallery 📱
 
-1. Install dependencies
+| 일반 | 폴드 |
+|------|------|
+| <img src="./images/normal_keyboard.png" width="300" alt="일반 폰 화면"> | <img src="./images/fold_keyboard.png" width="400" alt="폴드폰 화면"> |
 
-   ```bash
-   npm install
-   ```
+React Native 수습 기간 중 개발한 개인 갤러리 관리 토이 프로젝트입니다.
 
-2. Start the app
+## 📖 프로젝트 소개
 
-   ```bash
-   npx expo start
-   ```
+사용자가 디바이스의 내장 갤러리에서 사진을 선택하여 커스텀 앨범으로 관리할 수 있는 갤러리 앱입니다. 일반 스마트폰과 폴드폰의 화면 크기를 고려한 반응형 디자인을 적용했습니다.
 
-In the output, you'll find options to open the app in a
+## 주요 기능
 
-- [development build](https://docs.expo.dev/develop/development-builds/introduction/)
-- [Android emulator](https://docs.expo.dev/workflow/android-studio-emulator/)
-- [iOS simulator](https://docs.expo.dev/workflow/ios-simulator/)
-- [Expo Go](https://expo.dev/go), a limited sandbox for trying out app development with Expo
+### 1. 내장 갤러리 사진 선택
+- **ImagePicker API**를 사용하여 디바이스 갤러리에서 사진 선택
+- 갤러리에서 기존 사진 선택 가능
 
-You can start developing by editing the files inside the **app** directory. This project uses [file-based routing](https://docs.expo.dev/router/introduction).
+### 2. 앨범별 사진 관리
+- **커스텀 DropDownPicker** 구현으로 앨범 선택 및 생성
+- 앨범별로 사진을 분류하여 체계적인 관리 가능
 
-## Get a fresh project
+### 3. 이미지 상세 보기
+- 사진을 탭하면 **전체화면 모달**로 큰 이미지 확인
+- 직관적인 UI/UX 제공
 
-When you're ready, run:
+### 4. 모달 내 사진 네비게이션
+- 모달 내에서 **좌우 스와이프**로 앨범 내 다른 사진들 탐색
+- 이전/다음 화살표 버튼으로도 조작 가능
 
-```bash
-npm run reset-project
+### 5. 데이터 영구 저장
+- **AsyncStorage**를 활용한 로컬 데이터 저장
+- 앱 재시작 후에도 앨범과 사진 데이터 유지
+
+### 6. 반응형 그리드 레이아웃
+- **일반 스마트폰**: 3열 그리드
+- **폴드폰 (펼친 상태)**: 5열 그리드
+- 화면 크기에 따른 동적 컬럼 수 조정
+## 🚀 시작하기
+## 📁 프로젝트 구조
+
+```
+src/
+├── components/           # 재사용 가능한 UI 컴포넌트
+│   ├── BigImgModal.tsx      # 이미지 전체보기 모달
+│   ├── GallaryRenderItem.tsx # 갤러리 아이템 렌더러
+│   ├── ImageList.tsx        # 이미지 리스트 컴포넌트
+│   ├── MyDropDownPicker.tsx # 커스텀 드롭다운 피커
+│   └── TextInputModal.tsx   # 텍스트 입력 모달
+├── hooks/                # 커스텀 훅
+│   ├── useGallary.ts        # 갤러리 관련 로직
+└── utils/                # 유틸리티 함수
+    └── screenUtils.ts       # 화면 크기 계산 유틸
 ```
 
-This command will move the starter code to the **app-example** directory and create a blank **app** directory where you can start developing.
+## 주요 구현 사항
 
-## Learn more
+### 반응형 그리드 시스템
+```typescript
+// 화면 크기에 따른 동적 컬럼 계산
+const calculateNumColumns = () => {
+  const screenWidth = Dimensions.get('window').width;
+  if (screenWidth < 500) return 3;      // 일반 폰
+  if (screenWidth < 700) return 4;      // 큰 폰
+  if (screenWidth < 900) return 5;      // 폴드폰
+  return 6;                             // 태블릿
+};
+```
 
-To learn more about developing your project with Expo, look at the following resources:
+## 학습 목표 달성
 
-- [Expo documentation](https://docs.expo.dev/): Learn fundamentals, or go into advanced topics with our [guides](https://docs.expo.dev/guides).
-- [Learn Expo tutorial](https://docs.expo.dev/tutorial/introduction/): Follow a step-by-step tutorial where you'll create a project that runs on Android, iOS, and the web.
+이 프로젝트를 통해 다음과 같은 React Native 개발 역량을 습득했습니다:
 
-## Join the community
+- ✅ Expo 환경에서의 React Native 앱 개발
+- ✅ 디바이스 API (ImagePicker) 활용
+- ✅ 로컬 데이터 저장소 (AsyncStorage) 관리
+- ✅ 커스텀 컴포넌트 및 훅 개발
+- ✅ 반응형 디자인 및 화면 크기 대응
+- ✅ TypeScript를 활용한 타입 안정성 확보
+- ✅ 모달 및 네비게이션 구현
 
-Join our community of developers creating universal apps.
+---
 
-- [Expo on GitHub](https://github.com/expo/expo): View our open source platform and contribute.
-- [Discord community](https://chat.expo.dev): Chat with Expo users and ask questions.
+**개발 기간**: React Native 수습 기간 중  
+**개발자**: [Your Name]
