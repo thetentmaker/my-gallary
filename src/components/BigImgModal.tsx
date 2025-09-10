@@ -36,7 +36,7 @@ const ArrowButton = ({
   return (
     <TouchableOpacity
       style={styles.arrowButton}
-      onPress={onPress}
+      onPress={onPress} 
       disabled={disabled}
     >
       <SimpleLineIcons name={name} size={size} color={color} />
